@@ -4,9 +4,14 @@ open System
 
     module GuesserLogic =
         
-        let getrandomitem()  = 
+
+        let rec getrandomitem()  = 
             let rand = new System.Random()
-            let randWord = Configuration.WORDS.[rand.Next(Configuration.WORDS.Length)]
+            let mutable listOfWords = Configuration.WORDS
+            
+            let randWord = listOfWords.[rand.Next(listOfWords.Length)]
+            if Configuration.ALLOW_BLANKS = false && randWord.Contains(" ") then getrandomitem()
+            else
             if Configuration.CASE_SENSITIVE = false then 
                 let wordList = Seq.toList(randWord.ToLower())
                 wordList
@@ -25,13 +30,21 @@ open System
         let mutable charList:list<char> = []
         let appendToList (oldList) (newItem) = oldList @ [newItem]
         let addToMutable char = charList <- appendToList charList char
-
+        
         let rec compare2 secretWord addToGuessWord =
             match secretWord with
              | head :: tail -> 
               let rest = compare2 tail addToGuessWord
               if mem addToGuessWord head then head::rest
-              else Configuration.HINDDEN::rest
+              elif head = ' ' then ' '::rest
+              else Configuration.HIDDEN::rest
              | [] -> []
 
         let checkForGuessed secretWord charList = compare2 secretWord charList |> List.contains '*'
+        
+        let rec compare3 (secretWord:list<char>, guessWord:list<char>) =
+            match (secretWord, guessWord) with
+            |x::xs , y::ys -> 
+            if x = y then compare3 (xs, ys)
+            else x
+            |_ -> '_'

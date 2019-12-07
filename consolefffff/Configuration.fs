@@ -2,12 +2,15 @@
 open System
 
     module Configuration =
-        let HINDDEN = '*';
+        let HIDDEN = '*';
         let CASE_SENSITIVE = false;
         let ALLOW_BLANKS = false;
-        let HELP = false;
-        let MULTIPLE = false;
-        let WORDS = ["monkey";"Coffee";"london";"Girlfriend"; "concrete"; "wildfire"; "Mirror"]
+        let HELP = true;
+        let MULTIPLE = false; // sorry, we tried
+        let WORDS = ["Apple tree";"monkey";"Coffee";"london";"Girlfriend"; "concrete"; "wild fire"; "Mirror"]
+
+
+
 
 
 
