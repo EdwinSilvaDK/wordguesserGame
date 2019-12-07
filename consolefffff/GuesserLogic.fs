@@ -3,7 +3,7 @@ open System
 
 
     module GuesserLogic =
-
+        
         let getrandomitem()  = 
             let rand = new System.Random()
             let randWord = Configuration.WORDS.[rand.Next(Configuration.WORDS.Length)]
@@ -22,11 +22,16 @@ open System
            if x = head then true else mem tail x 
 
         let secretWord = getrandomitem()
-        let guessWord = Seq.toList "adcsqefthuj7"
-        let rec compare2 secretWord guessWord =
+        let mutable charList:list<char> = []
+        let appendToList (oldList) (newItem) = oldList @ [newItem]
+        let addToMutable char = charList <- appendToList charList char
+
+        let rec compare2 secretWord addToGuessWord =
             match secretWord with
              | head :: tail -> 
-              let rest = compare2 tail guessWord
-              if mem guessWord head then head::rest
+              let rest = compare2 tail addToGuessWord
+              if mem addToGuessWord head then head::rest
               else Configuration.HINDDEN::rest
              | [] -> []
+
+        let checkForGuessed secretWord charList = compare2 secretWord charList |> List.contains '*'
